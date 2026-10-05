@@ -2,10 +2,34 @@
 
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass, replace
+from dataclasses import asdict, dataclass, replace, is_dataclass
+from datetime import date, datetime
+from enum import Enum
 from hashlib import sha256
 import json
 from typing import Iterable
+
+
+def _json_default(value: object) -> object:
+    if isinstance(value, Enum):
+        return value.value
+    if isinstance(value, (date, datetime)):
+        return value.isoformat()
+    if is_dataclass(value):
+        return asdict(value)
+    raise TypeError(f"无法序列化 {type(value)!r}")
+
+
+def canonical_fingerprint(data: object) -> str:
+    """生成稳定内容摘要，供幂等、快照与审计使用。"""
+    payload = json.dumps(
+        data,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+        default=_json_default,
+    )
+    return sha256(payload.encode("utf-8")).hexdigest()
 
 
 @dataclass(frozen=True, slots=True)
@@ -30,8 +54,7 @@ class LocalizationCase:
 
     def fingerprint(self) -> str:
         """生成稳定摘要，供幂等和审计使用。"""
-        payload = json.dumps(asdict(self), ensure_ascii=False, sort_keys=True, separators=(",", ":"))
-        return sha256(payload.encode("utf-8")).hexdigest()
+        return canonical_fingerprint(asdict(self))
 
 
 def unique_by_identity(items: Iterable[LocalizationCase]) -> list[LocalizationCase]:

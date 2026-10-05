@@ -1,5 +1,60 @@
 """传动设备本地化设计闭环领域包。"""
 
-from .contracts import LocalizationCase, unique_by_identity
+from .contracts import LocalizationCase, canonical_fingerprint, unique_by_identity
+from .model import (
+    Baseline,
+    Calculation,
+    ChangeStatus,
+    Conflict,
+    ConflictKind,
+    ConflictStatus,
+    CustomerVoice,
+    DesignDecision,
+    EngineeringChange,
+    EventKind,
+    EventStatus,
+    ImpactEvent,
+    PartUsage,
+    Priority,
+    ProductConfiguration,
+    PrototypeValidation,
+    ReleasedUnit,
+    Requirement,
+    RequirementStatus,
+    SourceKind,
+    SubstitutionStatus,
+    SupplierSubstitution,
+    VerificationStatus,
+)
+from .service import LocalDesignService, ReleaseGateError
 
-__all__ = ["LocalizationCase", "unique_by_identity"]
+__all__ = [
+    "LocalizationCase",
+    "canonical_fingerprint",
+    "unique_by_identity",
+    "LocalDesignService",
+    "ReleaseGateError",
+    "Baseline",
+    "Calculation",
+    "ChangeStatus",
+    "Conflict",
+    "ConflictKind",
+    "ConflictStatus",
+    "CustomerVoice",
+    "DesignDecision",
+    "EngineeringChange",
+    "EventKind",
+    "EventStatus",
+    "ImpactEvent",
+    "PartUsage",
+    "Priority",
+    "ProductConfiguration",
+    "PrototypeValidation",
+    "ReleasedUnit",
+    "Requirement",
+    "RequirementStatus",
+    "SourceKind",
+    "SubstitutionStatus",
+    "SupplierSubstitution",
+    "VerificationStatus",
+]
